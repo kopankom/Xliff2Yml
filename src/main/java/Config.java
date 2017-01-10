@@ -11,10 +11,10 @@ import java.util.List;
  */
 public class Config {
     @Option(name="-r",usage="recursively run something")
-    public String recursive = "no";
+    public String recursive = null;
 
     @Option(name="-a",usage="append something")
-    public String append = "appned";
+    public String append = null;
 
     @Argument
     private List<String> arguments = new ArrayList<String>();
@@ -24,11 +24,8 @@ public class Config {
         parser.setUsageWidth(80);
 
         try {
-            // parse the arguments.
             parser.parseArgument(args);
 
-            // after parsing arguments, you should check
-            // if enough arguments are given.
             if( arguments.isEmpty() )
                 throw new CmdLineException(parser,"No argument is given");
 
