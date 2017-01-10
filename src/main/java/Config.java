@@ -10,6 +10,7 @@ import java.util.List;
  * Created by kopankom on 10.01.17.
  */
 public class Config {
+
     @Option(name="-r",usage="recursively run something")
     public String recursive = null;
 
