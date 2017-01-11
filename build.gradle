@@ -1,0 +1,26 @@
+group 'com.kopankom.xliff2yaml'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.7
+
+repositories {
+    jcenter()
+}
+dependencies {
+    compile "args4j:args4j:2.33"
+}
+task jarBuild(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Xliff2Yaml',
+                'Main-Class': 'Xliff2Yml'
+
+    }
+    libsDirName = '../bin'
+    archiveName = 'xliff2yaml.jar'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
