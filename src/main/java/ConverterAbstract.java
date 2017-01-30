@@ -9,7 +9,7 @@ public abstract class ConverterAbstract {
     protected String fileContent;
 
     @Setter @Getter
-    protected String fileName;
+    public String fileName;
 
     protected boolean loadFile() {
         return true;

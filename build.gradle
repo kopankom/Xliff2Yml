@@ -6,6 +6,7 @@ apply plugin: 'java'
 sourceCompatibility = 1.7
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 dependencies {
@@ -14,7 +15,7 @@ dependencies {
 }
 task jarBuild(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'Xliff2Yml'
+        attributes 'Main-Class': 'Xliff2Yaml'
     }
     libsDirName = '../bin'
     archiveName = 'xliff2yaml.jar'

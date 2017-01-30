@@ -1,3 +1,4 @@
+import lombok.Getter;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -6,8 +7,6 @@ import org.kohsuke.args4j.Option;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by kopankom on 10.01.17.
@@ -15,8 +14,16 @@ import java.util.regex.Pattern;
 
 public class Config {
 
+    @Getter
     public File file = null;
+
+    public File[] files = null;
+
+    @Getter
     public File directory = null;
+
+    @Argument
+    private List<String> arguments = new ArrayList<String>();
 
     @Option(name="-file",usage="file name")
     public void setFile(File file) throws Exception {
@@ -24,7 +31,7 @@ public class Config {
             throw new Exception("You can't use -file and -dir params at once");
         }
         if (file.exists()) {
-            this.file = file;
+            this.files[0] = file;
         } else {
             throw new Exception("File not found !");
         }
@@ -37,13 +44,13 @@ public class Config {
         }
         if (directory.exists() && directory.isDirectory()) {
             this.directory = directory;
+            File dir = new File(String.valueOf(directory));
+            File[] files = dir.listFiles();
         } else {
             throw new Exception("Directory not found or not directory !");
         }
     }
 
-    @Argument
-    private List<String> arguments = new ArrayList<String>();
 
     public void parse(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
@@ -55,7 +62,6 @@ public class Config {
             System.err.println(e.getMessage());
             System.err.println("java SampleMain [options...] arguments...");
             parser.printUsage(System.err);
-            System.err.println();
             return;
         }
     }
