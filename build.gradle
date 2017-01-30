@@ -10,6 +10,7 @@ repositories {
 }
 dependencies {
     compile "args4j:args4j:2.33"
+    compile "org.projectlombok:lombok:1.16.12"
 }
 task jarBuild(type: Jar) {
     manifest {

@@ -20,6 +20,9 @@ public class Config {
 
     @Option(name="-file",usage="file name")
     public void setFile(File file) throws Exception {
+        if (null != directory) {
+            throw new Exception("You can't use -file and -dir params at once");
+        }
         if (file.exists()) {
             this.file = file;
         } else {
@@ -27,21 +30,20 @@ public class Config {
         }
     }
 
-    @Option(name="-file",usage="file name")
+    @Option(name="-dir",usage="file name")
     public void setDirectory(File directory) throws Exception {
-        if (directory.exists()) {
+        if (null != file) {
+            throw new Exception("You can't use -file and -dir params at once");
+        }
+        if (directory.exists() && directory.isDirectory()) {
             this.directory = directory;
         } else {
-            throw new Exception("File not found !");
+            throw new Exception("Directory not found or not directory !");
         }
     }
 
     @Argument
     private List<String> arguments = new ArrayList<String>();
-
-    public void setArguments(List<String> arguments) {
-        this.arguments = arguments;
-    }
 
     public void parse(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
@@ -49,19 +51,12 @@ public class Config {
 
         try {
             parser.parseArgument(args);
-
-            if( arguments.isEmpty() )
-                throw new CmdLineException(parser,"No argument is given");
-
         } catch( CmdLineException e ) {
             System.err.println(e.getMessage());
             System.err.println("java SampleMain [options...] arguments...");
-            // print the list of available options
             parser.printUsage(System.err);
             System.err.println();
-
             return;
         }
-        System.out.println(recursive);
     }
 }
