@@ -8,6 +8,7 @@ import org.kohsuke.args4j.Option;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,8 +20,8 @@ public class Config {
     @Getter
     public File file = null;
 
-    @Setter @Getter
-    public File[] files;
+    @Getter
+    List<File> files = new ArrayList<>();
 
     @Getter
     public File directory = null;
@@ -34,7 +35,7 @@ public class Config {
             throw new Exception("You can't use -file and -dir params at once");
         }
         if (file.exists()) {
-            this.files[0] = file;
+            this.files.add(file);
         } else {
             throw new Exception("File not found !");
         }
@@ -48,7 +49,7 @@ public class Config {
         if (directory.exists() && directory.isDirectory()) {
             this.directory = directory;
             File dir = new File(String.valueOf(directory));
-            setFiles(dir.listFiles(new FileFilter() {
+            Collections.addAll(this.files, dir.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
                     return pathname.toString().endsWith(".xliff");
