@@ -1,10 +1,12 @@
 import lombok.Getter;
+import lombok.Setter;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,8 @@ public class Config {
     @Getter
     public File file = null;
 
-    public File[] files = null;
+    @Setter @Getter
+    public File[] files;
 
     @Getter
     public File directory = null;
@@ -45,7 +48,12 @@ public class Config {
         if (directory.exists() && directory.isDirectory()) {
             this.directory = directory;
             File dir = new File(String.valueOf(directory));
-            File[] files = dir.listFiles();
+            setFiles(dir.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return pathname.toString().endsWith(".xliff");
+                }
+            }));
         } else {
             throw new Exception("Directory not found or not directory !");
         }
