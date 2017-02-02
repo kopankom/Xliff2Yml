@@ -19,6 +19,8 @@ public class Application {
                 converter.convert();
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+//                e.printStackTrace();
             }
             System.out.println("a");
 
