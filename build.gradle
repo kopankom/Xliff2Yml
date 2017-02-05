@@ -12,6 +12,9 @@ repositories {
 dependencies {
     compile "args4j:args4j:2.33"
     compile "org.projectlombok:lombok:1.16.12"
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.17'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+
 }
 task jarBuild(type: Jar) {
     manifest {

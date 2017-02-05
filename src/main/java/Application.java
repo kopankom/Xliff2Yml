@@ -15,15 +15,14 @@ public class Application {
         for (int i = 0, c = config.getFiles().size(); i < c; i++) {
             Xliff2YamlConverter converter = new Xliff2YamlConverter();
             converter.setFile(config.getFiles().get(i));
+            String newFilename = FileManager.obtainFilename(config.getFiles().get(i), "%s.%s", "xliff", "yml");
             try {
                 converter.convert();
             } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-//                e.printStackTrace();
+            } catch (ConverterException e) {
             }
+            converter.saveFile(newFilename);
             System.out.println("a");
-
         }
     }
 
