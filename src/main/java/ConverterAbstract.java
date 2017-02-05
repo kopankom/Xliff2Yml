@@ -1,5 +1,6 @@
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -22,13 +23,20 @@ public abstract class ConverterAbstract {
     protected String result = "";
 
     @Getter @Setter
-    protected String outputLineFormat = "%s: %s";
+    protected String outputLineFormat = "%s: %s\n";
 
     protected boolean loadFile() {
         return true;
     }
 
-    protected boolean saveFile() {
+    protected boolean saveFile(String filename) {
+        File file = new File(filename);
+        try {
+            FileUtils.writeStringToFile(file, result);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
