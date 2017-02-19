@@ -1,4 +1,5 @@
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 
 /**
  * Created by kopankom on 30.01.17.
@@ -11,22 +12,28 @@ public class Application {
         config.parse(args);
     }
 
-    private void convertFiles() {
-        for (int i = 0, c = config.getFiles().size(); i < c; i++) {
+    private void convertFiles() throws ConverterException {
+        int filesCount = config.getFiles().size();
+        if (0 == filesCount) {
+            throw new ConverterException("No files to convert !");
+        }
+        for (int i = 0; i < filesCount; i++) {
             Xliff2YamlConverter converter = new Xliff2YamlConverter();
-            converter.setFile(config.getFiles().get(i));
-            String newFilename = FileManager.obtainFilename(config.getFiles().get(i), "%s.%s", "xliff", "yml");
+            File currentFile = config.getFiles().get(i);
+            converter.setFile(currentFile);
+            String newFilename = FileManager.obtainFilename(
+                    currentFile, "%s.%s", config.getXliffExtension(), config.getYamlExtension());
             try {
                 converter.convert();
             } catch (ParserConfigurationException e) {
-            } catch (ConverterException e) {
-            }
+            } catch (ConverterException e) {}
             converter.saveFile(newFilename);
-            System.out.println("a");
         }
     }
 
     public void run() {
-        convertFiles();
+        try {
+            convertFiles();
+        } catch (ConverterException e) {}
     }
 }

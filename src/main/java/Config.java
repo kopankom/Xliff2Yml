@@ -1,6 +1,4 @@
 import lombok.Getter;
-import lombok.Setter;
-import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -18,60 +16,52 @@ import java.util.List;
 public class Config {
 
     @Getter
-    public File file = null;
-
-    @Getter
     List<File> files = new ArrayList<>();
 
     @Getter
-    public File directory = null;
+    @Option(name = "-trans-unit", usage = "Translation unit node name")
+    private String transUnitNodeName = "trans-unit";
 
-    @Argument
-    private List<String> arguments = new ArrayList<String>();
+    @Getter
+    @Option(name = "-xliff-ext", usage = "Xliff files extension")
+    private String xliffExtension = "xliff";
 
-    @Option(name="-file",usage="file name")
-    public void setFile(File file) throws Exception {
-        if (null != directory) {
-            throw new Exception("You can't use -file and -dir params at once");
-        }
+    @Getter
+    @Option(name = "-yaml-ext", usage = "Yaml files extension")
+    private String yamlExtension = "yml";
+
+    @Option(name = "-file", usage = "Specify file name to convert", forbids = "-dir")
+    private void setFile(File file) throws ConverterException {
         if (file.exists()) {
             this.files.add(file);
         } else {
-            throw new Exception("File not found !");
+            throw new ConverterException("File not found !");
         }
     }
 
-    @Option(name="-dir",usage="file name")
-    public void setDirectory(File directory) throws Exception {
-        if (null != file) {
-            throw new Exception("You can't use -file and -dir params at once");
-        }
+    @Option(name="-dir",usage="Directory path to convert - convert all files inside directory",forbids = "-file")
+    private void setDirectory(File directory) throws ConverterException {
         if (directory.exists() && directory.isDirectory()) {
-            this.directory = directory;
             File dir = new File(String.valueOf(directory));
             Collections.addAll(this.files, dir.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
-                    return pathname.toString().endsWith(".xliff");
+                return pathname.toString().endsWith(".xliff");
                 }
             }));
         } else {
-            throw new Exception("Directory not found or not directory !");
+            throw new ConverterException("Directory not found or not directory !");
         }
     }
 
-
     public void parse(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
-        parser.setUsageWidth(80);
 
         try {
             parser.parseArgument(args);
         } catch( CmdLineException e ) {
-            System.err.println(e.getMessage());
-            System.err.println("java SampleMain [options...] arguments...");
+            System.err.println("\nXliff2Yaml Converter [options...]");
             parser.printUsage(System.err);
-            return;
         }
     }
 }

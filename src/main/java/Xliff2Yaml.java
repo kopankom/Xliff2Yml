@@ -10,5 +10,4 @@ public class Xliff2Yaml {
         app.setArgs(argv);
         app.run();
     }
-
 }
