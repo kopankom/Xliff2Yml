@@ -20,7 +20,7 @@ public abstract class ConverterAbstract {
     public File file;
 
     @Getter
-    protected String result = "";
+    protected StringBuilder result = new StringBuilder();
 
     @Getter @Setter
     protected String outputLineFormat = "%s: %s\n";
@@ -32,7 +32,7 @@ public abstract class ConverterAbstract {
     protected boolean saveFile(String filename) {
         File file = new File(filename);
         try {
-            FileUtils.writeStringToFile(file, result);
+            FileUtils.writeStringToFile(file, result.toString());
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -57,8 +57,11 @@ public abstract class ConverterAbstract {
     }
 
     protected void append(String source, String target) {
-        result += String.format(outputLineFormat, source, target);
-        System.out.println(result);
+        result.append(String.format(outputLineFormat, source, target));
+    }
+
+    protected void append(String text) {
+        result.append(text);
     }
 }
 
