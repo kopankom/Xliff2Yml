@@ -27,6 +27,14 @@ public class Config {
     private String xliffExtension = "xliff";
 
     @Getter
+    @Option(name = "-source", usage = "Specify 'source' node name")
+    private String sourceNodeName = "source";
+
+    @Getter
+    @Option(name = "-target", usage = "Specify 'target' node name")
+    private String targetNodeName = "target";
+
+    @Getter
     @Option(name = "-yaml-ext", usage = "Yaml files extension")
     private String yamlExtension = "yml";
 

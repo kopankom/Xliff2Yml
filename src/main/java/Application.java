@@ -17,17 +17,18 @@ public class Application {
         if (0 == filesCount) {
             throw new ConverterException("No files to convert !");
         }
+        Xliff2YamlConverter converter = new Xliff2YamlConverter();
+        converter.setConfig(config);
         for (int i = 0; i < filesCount; i++) {
-            Xliff2YamlConverter converter = new Xliff2YamlConverter();
             File currentFile = config.getFiles().get(i);
             converter.setFile(currentFile);
             String newFilename = FileManager.obtainFilename(
                     currentFile, "%s.%s", config.getXliffExtension(), config.getYamlExtension());
             try {
                 converter.convert();
+                converter.saveFile(newFilename);
             } catch (ParserConfigurationException e) {
             } catch (ConverterException e) {}
-            converter.saveFile(newFilename);
         }
     }
 
